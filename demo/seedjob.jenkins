@@ -1,0 +1,28 @@
+pipelineJob('demo jenkins job') {
+    displayName('demo devops config job')
+
+    logRotator {
+        numToKeep(10)
+        daysToKeep(30)
+    }
+
+    configure { project ->
+        project / 'properties' / 'org.jenkinsci.plugins.workflow.job.properties.DurabilityHintJobProperty' {
+            hint('PERFORMANCE_OPTIMIZED')
+        }
+    }
+
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/sndevopsconfig/web-api.git')
+                    }
+                    branches('*/master')
+                }
+            }
+            scriptPath('Jenkinsfile')
+        }
+    }
+}
